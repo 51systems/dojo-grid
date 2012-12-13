@@ -4,6 +4,12 @@ namespace DojoGrid\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 
+/**
+ * Dojo Grid View Helper.
+ *
+ *
+ * @author Dustin Thomson <dthomson@51systems.com>
+ */
 class Grid extends AbstractHelper
 {
     /**
@@ -41,6 +47,12 @@ class Grid extends AbstractHelper
     protected $_styleSheetsAdded = false;
 
     /**
+     * Flag to indicate that the dojo-grid package has been registered.
+     * @var bool
+     */
+    protected $_moduleRegistered = false;
+
+    /**
      * Creates a new grid instance
      *
      * @param string $id Grid ID
@@ -48,31 +60,26 @@ class Grid extends AbstractHelper
      * @param array[string][string] $attribs HTML attributes
      * @return GridContainer
      */
-    public function grid($id=null, array $params = array(), array $attribs = array())
+    public function __invoke($id=null, array $params = array(), array $attribs = array())
     {
         /**
          * @var $dojo \Dojo\View\Helper\Configuration
          * Note that this is actually a \Dojo\View\Helper\Dojo object that we proxy to configuration.
          */
         $dojo = $this->view->dojo();
-        if(!$this->_styleSheetsAdded){
-            $dojoPath = null;
-
-            if($dojo->useLocalPath()){
-                $dojoPath = $dojo->getLocalPath();
-            }else{
-                $dojoPath = $dojo->getCdnDojoPath();
-            }
-
-            //strip off the dojo.js from the path
-            $pathInfo = pathinfo($dojoPath);
-            $dojoPath = $pathInfo['dirname'];
-
-            $dojo->addStylesheet($dojoPath . '/../dojox/grid/resources/Grid.css');
-            $dojo->addStylesheet($dojoPath . '/../dojox/grid/resources/claroGrid.css');
-            $dojo->addStylesheet($dojoPath . '/../dojox/grid/enhanced/resources/EnhancedGrid.css');
+        if (!$this->_styleSheetsAdded) {
+            $dojo->addStylesheet(\Dojo\View\Helper\Configuration::DOJO_PATH_TOKEN . '/dojox/grid/resources/Grid.css');
+            $dojo->addStylesheet(\Dojo\View\Helper\Configuration::DOJO_PATH_TOKEN . '/dojox/grid/resources/claroGrid.css');
+            $dojo->addStylesheet(\Dojo\View\Helper\Configuration::DOJO_PATH_TOKEN . '/dojox/grid/enhanced/resources/EnhancedGrid.css');
 
             $this->_styleSheetsAdded = true;
+        }
+
+        if (!$this->_moduleRegistered) {
+            $baseUrl = rtrim($this->view->basePath(), '/');
+
+            $dojo->registerPackagePath('dojoGrid', $baseUrl . '/assets/js/dojoGrid');
+            $this->_moduleRegistered = true;
         }
 
         if(!isset($attribs['height'])){

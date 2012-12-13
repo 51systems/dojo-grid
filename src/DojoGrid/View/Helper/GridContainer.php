@@ -18,13 +18,13 @@ class GridContainer extends CustomDijit
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dext.widget.Grid';
+    protected $_dijit  = 'dojoGrid.widget.Grid';
 
     /**
      * Dojo module to use
      * @var string
      */
-    protected $_module = 'dext.widget.Grid';
+    protected $_module = 'dojoGrid.widget.Grid';
 
     /**
      * Id of the grid
@@ -91,9 +91,9 @@ class GridContainer extends CustomDijit
         //Setup the filter change for generating the name of columns
         $filterChain = new FilterChain();
         $filterChain
-            ->addFilter(new \Zend\Filter\StringTrim())
-            ->addFilter(new \Zend\Filter\Word\CamelCaseToSeparator())
-            ->addFilter(new \Zend\Filter\Callback('ucwords'));
+            ->attach(new \Zend\Filter\StringTrim())
+            ->attach(new \Zend\Filter\Word\CamelCaseToSeparator())
+            ->attach(new \Zend\Filter\Callback('ucwords'));
 
         $this->_nameFormatter = $filterChain;
     }
