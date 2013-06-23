@@ -1,17 +1,17 @@
 <div>
     <!-- Buttons that provide missing grid functionality -->
-    <div class="gridControls" dojoAttachPoint="editControlContainer">
-        <span dojoType="dijit.form.Button" dojoAttachEvent="onClick:_addRowBtnClick">Add New Row</span>
-        <span dojoType="dijit.form.Button" dojoAttachEvent="onClick:_deleteRowBtnClick">Delete Row</span>
-        <span dojoType="dijit.form.Button" dojoAttachPoint="applyButton" dojoAttachEvent="onClick:_applyBtnClick">Apply Changes</span>
-        <span dojoType="dijit.form.Button" dojoAttachPoint="cancelButton" dojoAttachEvent="onClick:_cancelBtnClick">Cancel</span>
+    <div class="gridControls" data-dojo-attach-point="editControlContainer">
+        <span data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:_addRowBtnClick">Add New Row</span>
+        <span data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:_deleteRowBtnClick">Delete Row</span>
+        <span data-dojo-type="dijit/form/Button" data-dojo-attach-point="applyButton" data-dojo-attach-event="onClick:_applyBtnClick">Apply Changes</span>
+        <span data-dojo-type="dijit/form/Button" data-dojo-attach-point="cancelButton" data-dojo-attach-event="onClick:_cancelBtnClick">Cancel</span>
     </div>
 
     <!-- This is taken partially from dojox/grid/resources/_Grid.html -->
-    <div hidefocus="hidefocus" wairole="grid" dojoAttachEvent="onmouseout:_mouseOut">
-        <div class="dojoxGridMasterHeader" dojoAttachPoint="viewsHeaderNode" wairole="presentation"></div>
-        <div class="dojoxGridMasterView" dojoAttachPoint="viewsNode" wairole="presentation"></div>
-        <div class="dojoxGridMasterMessages" style="display: none;" dojoAttachPoint="messagesNode"></div>
-        <span dojoAttachPoint="lastFocusNode" tabindex="0"></span>
+    <div hidefocus="hidefocus" wairole="grid" data-dojo-attach-event="onmouseout:_mouseOut">
+        <div class="dojoxGridMasterHeader" data-dojo-attach-point="viewsHeaderNode" wairole="presentation"></div>
+        <div class="dojoxGridMasterView" data-dojo-attach-point="viewsNode" wairole="presentation"></div>
+        <div class="dojoxGridMasterMessages" style="display: none;" data-dojo-attach-point="messagesNode"></div>
+        <span data-dojo-attach-point="lastFocusNode" tabindex="0"></span>
     </div>
 </div>

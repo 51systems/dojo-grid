@@ -1,8 +1,8 @@
-require([
+define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/_base/event",
-    "dojo/_base/connect",
+    "dojo/aspect",
     "dojo/_base/unload",
     "dojo/dom-style",
     "dojox/grid/EnhancedGrid",
@@ -10,30 +10,32 @@ require([
     "dojo/text!dojoGrid/widget/templates/grid.html",
 
     //Template & Functionality requires
-    "dojoGrid/widget/grid/NewRowDialog",
-    "dijit/form/Button",
+    "./grid/NewRowDialog",
 
     //Grid Mixins
     "dojox/grid/cells/dijit"
 ],
 
-    function(declare, lang, event, connect, unload, style, EnhancedGrid, _WidgetsInTemplateMixin, gridTemplate, NewRowDialog){
+    function(declare, lang, event, aspect, unload, style, EnhancedGrid, _WidgetsInTemplateMixin, gridTemplate, NewRowDialog) {
         return declare("dojoGrid.widget.Grid", [EnhancedGrid, _WidgetsInTemplateMixin], {
             templateString: gridTemplate,
             widgetsInTemplate: true,
             editable: false,
 
-            postCreate: function(){
-                this.inherited(arguments);
+            //TODO: on google's cdn, if we dont overwrite these messages, there is an error loaind the nls
+            loadingMessage: "<span class='dojoxGridLoading'>Loading...</span>",
+            errorMessage: "<span class='dojoxGridError'>Sorry, an error occurred</span>",
 
+            postCreate: function() {
+                this.inherited(arguments);
 
                 //we should be clean to begin with, and even if we are not, we will check below
                 this._onStoreClean();
 
                 //wire up the events
-                connect.connect(this.store, 'onNew', lang.hitch(this, '_onStoreDirty'));
-                connect.connect(this.store, 'onDelete', lang.hitch(this, '_onStoreDirty'));
-                connect.connect(this.store, 'onSet', lang.hitch(this, '_onStoreDirty'));
+                this.own(aspect.after(this.store, 'onNew', lang.hitch(this, '_onStoreDirty')));
+                this.own(aspect.after(this.store, 'onDelete', lang.hitch(this, '_onStoreDirty')));
+                this.own(aspect.after(this.store, 'onSet', lang.hitch(this, '_onStoreDirty')));
 
                 unload.addOnWindowUnload(this, '_windowOnUnload');
 

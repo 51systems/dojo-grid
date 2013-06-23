@@ -2,6 +2,7 @@
 
 namespace DojoGrid\View\Helper;
 
+use Dojo\View\Exception\RuntimeException;
 use Zend\View\Helper\AbstractHelper;
 
 /**
@@ -41,16 +42,15 @@ class Grid extends AbstractHelper
     const PLUGIN_FILTER = 'Filter';
 
     /**
+     * The dojo module identifer for the grid.
+     */
+    const MODULE_KEY = 'dojoGrid';
+
+    /**
      * Flag to indicate that the grid stylesheets have been added
      * @var bool
      */
     protected $_styleSheetsAdded = false;
-
-    /**
-     * Flag to indicate that the dojo-grid package has been registered.
-     * @var bool
-     */
-    protected $_moduleRegistered = false;
 
     /**
      * Creates a new grid instance
@@ -75,11 +75,8 @@ class Grid extends AbstractHelper
             $this->_styleSheetsAdded = true;
         }
 
-        if (!$this->_moduleRegistered) {
-            $baseUrl = rtrim($this->view->basePath(), '/');
-
-            $dojo->registerPackagePath('dojoGrid', $baseUrl . '/assets/js/dojoGrid');
-            $this->_moduleRegistered = true;
+        if (!array_key_exists(self::MODULE_KEY, $dojo->getPackagePaths())) {
+            throw new RuntimeException("Dojo grid package has not been registered");
         }
 
         if(!isset($attribs['height'])){

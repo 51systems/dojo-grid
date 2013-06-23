@@ -36,7 +36,7 @@ class Module
          * Note that this is actually a \Dojo\View\Helper\Dojo object that we proxy to configuration.
          */
         $dojo = $view->plugin('dojo');
-        $baseUrl = rtrim($as->getConfiguration()->getBaseUrl(), '/');
+        $baseUrl = rtrim($as->getConfiguration()->getBaseUrl() . $as->getConfiguration()->getBasePath(), '/');
 
         $dojo->registerPackagePath('dojoGrid', $baseUrl . '/js/dojoGrid');
     }

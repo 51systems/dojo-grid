@@ -18,13 +18,13 @@ class GridContainer extends CustomDijit
      * Dijit being used
      * @var string
      */
-    protected $_dijit  = 'dojoGrid.widget.Grid';
+    protected $_dijit  = 'dojoGrid/widget/Grid';
 
     /**
      * Dojo module to use
      * @var string
      */
-    protected $_module = 'dojoGrid.widget.Grid';
+    protected $_module = 'dojoGrid/widget/Grid';
 
     /**
      * Id of the grid
@@ -196,7 +196,7 @@ class GridContainer extends CustomDijit
      */
     public function enablePlugin($plugin, $params = true)
     {
-        $this->view->dojo()->requireModule('dojox.grid.enhanced.plugins.' . $plugin);
+        $this->view->dojo()->requireModule('dojox/grid/enhanced/plugins/' . $plugin);
 
         switch($plugin){
 
@@ -214,12 +214,33 @@ class GridContainer extends CustomDijit
     }
 
     /**
+     * Validates the grid configuration parameters.
+     *
+     * @return string[]
+     */
+    private function _validate()
+    {
+        $errors = array();
+
+        if (empty($this->_columnLayout)) {
+            $errors[] = "At least one grid column must be specified";
+        }
+
+        return $errors;
+    }
+
+    /**
      * Render grid widget as string
      *
      * @return string
      */
     public function __toString()
     {
+        $errors = $this->_validate();
+        if (!empty($errors)) {
+            return "GRID CONFIGURATION ERRORS:<br/>\n" . join("<br/>\n", $errors);
+        }
+
         $htmlString = '';
 
         //Setup the store

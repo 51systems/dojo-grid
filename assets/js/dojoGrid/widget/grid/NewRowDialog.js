@@ -1,4 +1,5 @@
-require([
+define([
+    "require",
     "dojo/_base/lang",
     "dojo/_base/declare",
     "dojo/_base/event",
@@ -9,11 +10,11 @@ require([
     "dijit/Dialog",
 
     //Dext components
-    "dext/_base/lang",
+    "dext/_base/lang"
 
 ],
 
-    function(lang, declare, event, array, query, attr, construct, Dialog, dextLang){
+    function(require, lang, declare, event, array, query, attr, construct, Dialog, dextLang){
         return declare("dojoGrid.widget.grid.NewRowDialog", [Dialog], {
             /**
              * Default dialog title
@@ -25,23 +26,21 @@ require([
              */
             grid: null,
 
-            buildRendering: function(){
+            buildRendering: function() {
                 this.inherited(arguments);
 
                 //get all the editors from the cells and ensure the appropriate dijits are loaded
                 var cellEditors = [];
-                array.forEach(this.grid.layout.cells, lang.hitch(this, function(item, index, array){
-                    if(!item.editable && !item.editableOnNew)
+                array.forEach(this.grid.layout.cells, lang.hitch(this, function(item, index, array) {
+                    if (!item.editable && !item.editableOnNew)
                         return;
 
-                    var editorDesc = this._getEditor(item);
-                    dojo.require(editorDesc.editorClass);
-
-                    cellEditors[cellEditors.length] = editorDesc;
+                    cellEditors[cellEditors.length] = this._getEditor(item);
                 }));
 
-                //wait until the dijits are loaded before instantiating the editors
-                dojo.ready(lang.hitch(this, function(){
+                //require all the dijits, and then build the rendering
+                require(array.map(cellEditors, function(editor){return editor.editorClass}), lang.hitch(this, function() {
+
                     var containerNode = query(this.containerNode);
 
                     //Create all the editors
