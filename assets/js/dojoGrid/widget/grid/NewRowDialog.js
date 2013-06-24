@@ -49,7 +49,7 @@ define([
                         attr.set(label, 'innerHTML', item.name);
                         containerNode.adopt(label);
 
-                        var editor = new eval(item.editorClass)(item.params);
+                        var editor = new (eval(item.editorClass.replace(/\//g, '.')))(item.params);
                         containerNode.adopt(editor.domNode);
                     });
 
@@ -102,11 +102,11 @@ define([
              * @param cell The cell to get the editor for
              */
             _getEditor: function(cell){
-                var editorClass = 'dijit.form.ValidationTextBox';
+                var editorClass = 'dijit/form/ValidationTextBox';
 
                 if(dextLang.isset(cell.type)){
                     if(cell.type == dojox.grid.cells.CheckBox){
-                        editorClass = 'dijit.form.CheckBox';
+                        editorClass = 'dijit/form/CheckBox';
                     }
                 }
 
