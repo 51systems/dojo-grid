@@ -2,12 +2,13 @@
 
 namespace DojoGrid;
 
+use Zend\ModuleManager\Feature\DependencyIndicatorInterface;
 use Zend\Mvc\MvcEvent;
 
 /**
  *
  */
-class Module
+class Module implements DependencyIndicatorInterface
 {
     public function getConfig()
     {
@@ -51,5 +52,15 @@ class Module
                 },
             ),
         );
+    }
+
+    /**
+     * Expected to return an array of modules on which the current one depends on
+     *
+     * @return array
+     */
+    public function getModuleDependencies()
+    {
+        return array('Dojo', 'Dext');
     }
 }
