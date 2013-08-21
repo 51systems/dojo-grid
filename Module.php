@@ -2,20 +2,33 @@
 
 namespace DojoGrid;
 
+use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\DependencyIndicatorInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\View\Renderer\RendererInterface;
 
 /**
  *
  */
-class Module implements DependencyIndicatorInterface
+class Module implements
+    ConfigProviderInterface,
+    InitProviderInterface,
+    BootstrapListenerInterface
 {
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e)
+    /**
+     * @param EventInterface|MvcEvent $e
+     * @return array|void
+     */
+    public function onBootstrap(EventInterface $e)
     {
         $serviceManager = $e->getApplication()->getServiceManager();
 
@@ -29,7 +42,7 @@ class Module implements DependencyIndicatorInterface
         $rootDir = __DIR__ . DIRECTORY_SEPARATOR . 'assets';
         \Dext\AsseticHelper::registerDir($assetManager, $rootDir);
 
-        /** @var $view Zend\View\RendererInterface */
+        /** @var $view RendererInterface */
         $view = $serviceManager->get('viewmanager')->getRenderer();
 
         /**
@@ -55,12 +68,10 @@ class Module implements DependencyIndicatorInterface
     }
 
     /**
-     * Expected to return an array of modules on which the current one depends on
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function getModuleDependencies()
+    public function init(ModuleManagerInterface $manager)
     {
-        return array('Dojo', 'Dext');
+        $manager->loadModule('Dext');
     }
 }
