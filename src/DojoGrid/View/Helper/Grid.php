@@ -80,7 +80,7 @@ class Grid extends AbstractHelper
         }
 
         if(!isset($attribs['height'])){
-            $attribs['height'] = '200px';
+            $attribs['height'] = '15em';
         }
 
         $helper =  new GridContainer($id, $params, $attribs);

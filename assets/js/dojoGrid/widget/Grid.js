@@ -44,6 +44,16 @@ define([
                 }
             },
 
+            _getHeaderHeight: function () {
+                var value = this.inherited(arguments);
+
+                if (style.get(this.editControlContainer, 'display') != 'none') {
+                    return value + style.get(this.editControlContainer, 'height');
+                }
+
+                return value;
+            },
+
             /**
              *
              * @param value Flag to indicate if the grid is editable.
