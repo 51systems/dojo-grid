@@ -1,6 +1,7 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
+    "dojo/_base/array",
     "dojo/_base/event",
     "dojo/aspect",
     "dojo/_base/unload",
@@ -16,7 +17,7 @@ define([
     "dojox/grid/cells/dijit"
 ],
 
-    function(declare, lang, event, aspect, unload, style, EnhancedGrid, _WidgetsInTemplateMixin, gridTemplate, NewRowDialog) {
+    function(declare, lang, array, event, aspect, unload, style, EnhancedGrid, _WidgetsInTemplateMixin, gridTemplate, NewRowDialog) {
         return declare("dojoGrid.widget.Grid", [EnhancedGrid, _WidgetsInTemplateMixin], {
             templateString: gridTemplate,
             widgetsInTemplate: true,
@@ -84,7 +85,24 @@ define([
             },
 
             _applyBtnClick: function(e){
-                this.store.save();
+                var actions = this.store.save();
+
+                //Bind to the action callbacks so we can re-render the rows
+                var processedActions = 0;
+                var _this = this;
+                array.forEach(actions, function(action){
+                    action.deferred.then(lang.hitch(_this, function(data){
+                        if (++processedActions >= actions.length) {
+                            this.render()
+                        }
+
+                    }), lang.hitch(function(error){
+                        if (++processedActions >= actions.length) {
+                            this.render()
+                        }
+                    }));
+                });
+
                 this._onStoreClean();
             },
 
