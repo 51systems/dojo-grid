@@ -96,7 +96,8 @@ define([
                             this.render()
                         }
 
-                    }), lang.hitch(function(error){
+                    }), lang.hitch(function(error) {
+                        alert('There was an error saving the records. Some changes may have been lost.\n' + error.message);
                         if (++processedActions >= actions.length) {
                             this.render()
                         }
