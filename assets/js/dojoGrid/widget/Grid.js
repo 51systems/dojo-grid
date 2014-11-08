@@ -38,7 +38,7 @@ define([
                 this.own(aspect.after(this.store, 'onDelete', lang.hitch(this, '_onStoreDirty')));
                 this.own(aspect.after(this.store, 'onSet', lang.hitch(this, '_onStoreDirty')));
 
-                unload.addOnWindowUnload(this, '_windowOnUnload');
+                unload.addOnUnload(this, '_windowOnUnload');
 
                 if(this.store.isDirty()){
                     this._onStoreDirty();
