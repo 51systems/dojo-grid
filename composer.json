@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.3",
         "51systems/dojo-module": "dev-dojo2",
-        "51systems/dext": "dev-master"
+        "51systems/dext": "dev-dojo2"
     },
     "autoload": {
         "psr-0": {
