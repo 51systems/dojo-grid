@@ -46,13 +46,13 @@ class Module implements
         $view = $serviceManager->get('viewmanager')->getRenderer();
 
         /**
-         * @var $dojo \Dojo\View\Helper\Configuration
+         * @var $dojo \Dojo\Builder\Configuration
          * Note that this is actually a \Dojo\View\Helper\Dojo object that we proxy to configuration.
          */
         $dojo = $view->plugin('dojo');
         $baseUrl = rtrim($as->getConfiguration()->getBaseUrl() . $as->getConfiguration()->getBasePath(), '/');
 
-        $dojo->registerPackagePath('dojoGrid', $baseUrl . '/js/dojoGrid');
+        $dojo->getDojoConfig()->registerPackage('dojoGrid', $baseUrl . '/js/dojoGrid');
     }
 
     public function getViewHelperConfig()
