@@ -3,7 +3,9 @@
 namespace DojoGrid\View\Helper;
 
 use Dojo\View\Exception\RuntimeException;
+use DojoGrid\View\Exception\InvalidArgumentException;
 use Zend\View\Helper\AbstractHelper;
+use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Dojo Grid View Helper.
@@ -63,19 +65,27 @@ class Grid extends AbstractHelper
     public function __invoke($id=null, array $params = array(), array $attribs = array())
     {
         /**
-         * @var $dojo \Dojo\View\Helper\Configuration
+         * @var $dojo \Dojo\Builder\Configuration
          * Note that this is actually a \Dojo\View\Helper\Dojo object that we proxy to configuration.
          */
-        $dojo = $this->view->dojo();
+        if ($this->view instanceof PhpRenderer) {
+            $dojo = $this->view->plugin('dojo');
+        } else {
+            throw new InvalidArgumentException(sprintf(
+                'Only view objects of type PhpRenderer are supported. Got "%s"',
+                get_class($this->view)
+            ));
+        }
+
         if (!$this->_styleSheetsAdded) {
-            $dojo->addStylesheet(\Dojo\View\Helper\Configuration::DOJO_PATH_TOKEN . '/dojox/grid/resources/Grid.css');
-            $dojo->addStylesheet(\Dojo\View\Helper\Configuration::DOJO_PATH_TOKEN . '/dojox/grid/resources/claroGrid.css');
-            $dojo->addStylesheet(\Dojo\View\Helper\Configuration::DOJO_PATH_TOKEN . '/dojox/grid/enhanced/resources/EnhancedGrid.css');
+            $dojo->addStylesheet('dojox/grid/resources/Grid.css');
+            $dojo->addStylesheet('dojox/grid/resources/claroGrid.css');
+            $dojo->addStylesheet('dojox/grid/enhanced/resources/EnhancedGrid.css');
 
             $this->_styleSheetsAdded = true;
         }
 
-        if (!array_key_exists(self::MODULE_KEY, $dojo->getPackagePaths())) {
+        if (!$dojo->getDojoConfig()->isPackageRegistered(self::MODULE_KEY)) {
             throw new RuntimeException("Dojo grid package has not been registered");
         }
 
