@@ -2,6 +2,7 @@
     "name": "51systems/dojo-grid",
     "description": "Dojo grid implementation for the Zend Framework 2",
     "type": "library",
+    "license": "BSD-3-Clause",
     "keywords": [
         "dojo",
         "zf2"
@@ -15,14 +16,16 @@
     ],
     "require": {
         "php": ">=5.3",
-        "51systems/dojo-module": "dev-dojo2",
-        "51systems/dext": "dev-dojo2"
+
+        "zendframework/zend-view": "^2.5",
+
+        "51systems/dojo-module": "dev-zf3",
+        "51systems/dext": "dev-zf3"
     },
     "autoload": {
-        "psr-0": {
-            "DojoGrid": "src/"
-        },
-        "classmap" : ["Module.php"]
+        "psr-4": {
+            "DojoGrid\\": "src/"
+        }
     },
     "bin": [
     ]
