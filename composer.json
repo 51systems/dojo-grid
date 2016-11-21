@@ -18,8 +18,6 @@
         "php": ">=5.3",
 
         "zendframework/zend-view": "^2.5",
-
-        "51systems/dojo-module": "dev-zf3",
         "51systems/dext": "dev-zf3"
     },
     "autoload": {
