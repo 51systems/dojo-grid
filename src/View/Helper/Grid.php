@@ -85,10 +85,6 @@ class Grid extends AbstractHelper
             $this->_styleSheetsAdded = true;
         }
 
-        if (!$dojo->getDojoConfig()->isPackageRegistered(self::MODULE_KEY)) {
-            throw new RuntimeException("Dojo grid package has not been registered");
-        }
-
         if(!isset($attribs['height'])){
             $attribs['height'] = '15em';
         }
